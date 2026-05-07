@@ -11,25 +11,22 @@ def get_code_summary():
     return context
 
 def generate_readme():
-    print("🔍 Scanning project files...")
+    print(" Scanning project files...")
     code_content = get_code_summary()
     
     if not code_content:
         print(" No .py files found to analyze!")
         return
 
-    # We make the instruction very clear and separate from the code
     instruction = "Write a professional GitHub README.md for the following code. Use sections like Features and Usage. Return ONLY the markdown text."
     full_prompt = f"{instruction}\n\nCODE TO ANALYZE:\n{code_content}"
     
     print(" Sending to Gemini CLI...")
     
     try:
-        # We pass the prompt directly as an argument to the 'gemini' command
         result = subprocess.run(['gemini', full_prompt], capture_output=True, text=True, shell=True)
         
         if result.stdout:
-            # We clean the output (sometimes CLIs add extra spaces)
             clean_output = result.stdout.strip()
             
             with open("README_GENERATED.md", "w", encoding='utf-8') as f:
